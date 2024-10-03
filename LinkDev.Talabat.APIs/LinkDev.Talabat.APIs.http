@@ -1,0 +1,12 @@
+@LinkDev.Talabat.APIs_HostAddress = https://localhost:7024
+
+# it is working with the dot 
+
+GET {{LinkDev.Talabat.APIs_HostAddress}}/api/weatherforecast/
+Accept: application/json
+
+###
+
+GET {{LinkDev.Talabat.APIs_HostAddress}}/api/weatherforecast
+
+###

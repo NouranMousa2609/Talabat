@@ -11,10 +11,10 @@ namespace LinkDev.Talabat.Core.Domain.Common
 		public required Tkey Id  { get; set; }
 
 		public required string Createdby { get; set; }
-		public DateTime CreatedOn { get; set; } /*= DateTime.UtcNow;*/
+		public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
 
 		public required string LastModifiedBy { get; set; }
-		public DateTime LastModifiedOn { get; set; } /*= DateTime.UtcNow;*/
+		public DateTime LastModifiedOn { get; set; } = DateTime.UtcNow;
 
 
 

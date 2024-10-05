@@ -1,4 +1,6 @@
-
+using LinkDev.Talabat.Infrastructure.Persistence;
+using LinkDev.Talabat.Infrastructure.Persistence.Data;
+using Microsoft.EntityFrameworkCore;
 namespace LinkDev.Talabat.APIs
 {
 	public class Program
@@ -13,8 +15,10 @@ namespace LinkDev.Talabat.APIs
 
 			builder.Services.AddControllers();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen(); 
+			builder.Services.AddEndpointsApiExplorer().AddSwaggerGen();
+
+			//builder.Services.AddPersistenceService(builder.Configuration);
+			DependencyInjection.AddPersistenceService(builder.Services,builder.Configuration);
 			#endregion
 
 			var app = builder.Build();

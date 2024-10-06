@@ -10,7 +10,7 @@ namespace LinkDev.Talabat.Infrastructure.Persistence
 		{
 			Services.AddDbContext<StoreContext>((optionsbuilder) =>
 			{
-				optionsbuilder.UseSqlServer(configuration.GetConnectionString("StoreContex"));
+				optionsbuilder.UseSqlServer(configuration.GetConnectionString("StoreContext"));
 
 
 

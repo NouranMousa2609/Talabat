@@ -39,6 +39,8 @@ namespace LinkDev.Talabat.APIs
 				if (PendingMigrations.Any())
 				    await dbContext.Database.MigrateAsync();
 
+				await StoreContextSeed.SeedAsync(dbContext);
+
 			}
 			catch(Exception ex) 
 			{

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace LinkDev.Talabat.Infrastructure.Persistence.Data.Migrations
+namespace LinkDev.Talabat.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
     public partial class ProductModuleMigration : Migration
@@ -18,7 +18,7 @@ namespace LinkDev.Talabat.Infrastructure.Persistence.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Createdby = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -35,7 +35,7 @@ namespace LinkDev.Talabat.Infrastructure.Persistence.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Createdby = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -57,7 +57,7 @@ namespace LinkDev.Talabat.Infrastructure.Persistence.Data.Migrations
                     Price = table.Column<decimal>(type: "decimal(9,2)", nullable: false),
                     BrandId = table.Column<int>(type: "int", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: true),
-                    Createdby = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false)

@@ -16,7 +16,7 @@ namespace LinkDev.Talabat.Infrastructure.Persistence.Data.Config.Base
 			builder.Property(E => E.Id)
 				.ValueGeneratedOnAdd();
 
-			builder.Property(E => E.Createdby)
+			builder.Property(E => E.CreatedBy)
 				.IsRequired();
 
 			builder.Property(E => E.CreatedOn)

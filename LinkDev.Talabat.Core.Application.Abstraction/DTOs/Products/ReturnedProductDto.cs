@@ -8,6 +8,7 @@ namespace LinkDev.Talabat.Core.Application.Abstraction.DTOs.Products
 {
 	public class ReturnedProductDto
 	{
+		public int Id { get; set; }
 		public required string Name { get; set; }
 
 		public required string Description { get; set; }

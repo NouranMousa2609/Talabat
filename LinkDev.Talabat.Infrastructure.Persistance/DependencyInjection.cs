@@ -1,14 +1,14 @@
-﻿using LinkDev.Talabat.Core.Domain.Contracts;
-using LinkDev.Talabat.Infrastructure.Persistence.Data;
+﻿using LinkDev.Talabat.Infrastructure.Persistence.Data;
 using LinkDev.Talabat.Infrastructure.Persistence.Data.Interceptors;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using  LinkDev.Talabat.Infrastructure.Persistence.UnitOfWork;
+using LinkDev.Talabat.Infrastructure.Persistence.UnitOfWork;
+using LinkDev.Talabat.Core.Domain.Contracts.Presistence;
 
 namespace LinkDev.Talabat.Infrastructure.Persistence
 {
-	public static class DependencyInjection
+    public static class DependencyInjection
 	{
 		public static IServiceCollection AddPersistenceService (this IServiceCollection Services,IConfiguration configuration)
 		{

@@ -16,10 +16,10 @@ namespace LinkDev.Talabat.APIs.Controllers.Controllers.Products
 		[HttpGet] //GET: Base/api/Products
 
 		public async Task<ActionResult<IEnumerable<ReturnedProductDto>>> GetProducts()
-		{
+		 {
 			var products = await serviceManager.ProductService.GetProductsAsync();
 
-			return Ok();
+			return Ok(products);
 		}
 
 		[HttpGet("{id:int}")] //GET: Base/api/Products
@@ -29,7 +29,7 @@ namespace LinkDev.Talabat.APIs.Controllers.Controllers.Products
 			if (products == null) 
 				return NotFound(new {StatusCode = 404,message= "not found"});
 
-			return Ok();
+			return Ok(products);
 		}
 
 

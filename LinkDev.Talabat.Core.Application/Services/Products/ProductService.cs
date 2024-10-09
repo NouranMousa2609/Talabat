@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using LinkDev.Talabat.Core.Application.Abstraction.DTOs.Products;
 using LinkDev.Talabat.Core.Application.Abstraction.Services.Products;
-using LinkDev.Talabat.Core.Domain.Contracts;
+using LinkDev.Talabat.Core.Domain.Contracts.Presistence;
+using LinkDev.Talabat.Core.Domain.Contracts.Specifications;
+using LinkDev.Talabat.Core.Domain.Contracts.Specifications.Products;
 using LinkDev.Talabat.Core.Domain.Entities.Products;
 namespace LinkDev.Talabat.Core.Application.Services.Products
 {
@@ -14,7 +16,11 @@ namespace LinkDev.Talabat.Core.Application.Services.Products
     {
         public async Task<IEnumerable<ReturnedProductDto>> GetProductsAsync()
         {
-            var Products = await unitOfWork.GetRepository<Product, int>().GetAllAsync();
+            var spec = new ProductWithBrandAndCategorySpecifications();
+
+
+
+			var Products = await unitOfWork.GetRepository<Product, int>().GetAllWithSpecAsync(spec);
             var MappedProducts = mapper.Map<IEnumerable<ReturnedProductDto>>(Products);
 
             return MappedProducts;
@@ -22,8 +28,8 @@ namespace LinkDev.Talabat.Core.Application.Services.Products
 
 
         public async Task<ReturnedProductDto> GetProductAsync(int id)
-        {
-            var Product = await unitOfWork.GetRepository<Product, int>().GetAsync(id);
+		{
+			var Product = await unitOfWork.GetRepository<Product, int>().GetAsync(id);
 
             var MappedProduct = mapper.Map<ReturnedProductDto>(Product);
             return MappedProduct;

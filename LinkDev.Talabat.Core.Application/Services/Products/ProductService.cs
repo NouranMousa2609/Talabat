@@ -28,8 +28,11 @@ namespace LinkDev.Talabat.Core.Application.Services.Products
 
 
         public async Task<ReturnedProductDto> GetProductAsync(int id)
+
 		{
-			var Product = await unitOfWork.GetRepository<Product, int>().GetAsync(id);
+			var spec = new ProductWithBrandAndCategorySpecifications(id);
+
+			var Product = await unitOfWork.GetRepository<Product, int>().GetWithSpecAsync(spec);
 
             var MappedProduct = mapper.Map<ReturnedProductDto>(Product);
             return MappedProduct;

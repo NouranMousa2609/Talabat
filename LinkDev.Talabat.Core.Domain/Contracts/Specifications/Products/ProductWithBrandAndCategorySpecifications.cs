@@ -12,10 +12,24 @@ namespace LinkDev.Talabat.Core.Domain.Contracts.Specifications.Products
 	{
         public ProductWithBrandAndCategorySpecifications():base()
         {
-            Includes.Add(P => P.Brand!);
-            Includes.Add(P => P.Category!);
-            
-        }
+			AddIncludes();
+
+
+		}
+        public ProductWithBrandAndCategorySpecifications(int id):base(id)
+        {
+
+			AddIncludes();
+
+
+		}
+
+        private void AddIncludes()
+        {
+			Includes.Add(P => P.Brand!);
+			Includes.Add(P => P.Category!);
+
+		}
     }
 	
 }

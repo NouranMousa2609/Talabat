@@ -14,7 +14,9 @@ namespace LinkDev.Talabat.Infrastructure.Persistence
 		{
 			Services.AddDbContext<StoreContext>((optionsbuilder) =>
 			{
-				optionsbuilder.UseSqlServer(configuration.GetConnectionString("StoreContext"));
+				optionsbuilder
+				.UseLazyLoadingProxies()
+				.UseSqlServer(configuration.GetConnectionString("StoreContext"));
 
 
 

@@ -5,6 +5,7 @@ using LinkDev.Talabat.Infrastructure.Persistence;
 using LinkDev.Talabat.Infrastructure.Persistence.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using LinkDev.Talabat.Core.Application;
 namespace LinkDev.Talabat.APIs
 {
 	public class Program
@@ -28,6 +29,7 @@ namespace LinkDev.Talabat.APIs
 			builder.Services.AddScoped(typeof(ILoggedInUserService),typeof(LoggedInUserService));
 			//builder.Services.AddPersistenceService(builder.Configuration);
 			DependencyInjection.AddPersistenceService(builder.Services,builder.Configuration);
+			builder.Services.AddApplicationService();
 			#endregion
 
 			var app = builder.Build();

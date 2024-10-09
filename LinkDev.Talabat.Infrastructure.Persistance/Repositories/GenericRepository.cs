@@ -1,5 +1,6 @@
 ﻿using LinkDev.Talabat.Core.Domain.Common;
 using LinkDev.Talabat.Core.Domain.Contracts;
+using LinkDev.Talabat.Core.Domain.Entities.Products;
 using LinkDev.Talabat.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,14 +10,23 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace LinkDev.Talabat.Infrastructure.Persistence.Repositories
-{
+{ 
 	public class GenericRepository<TEntity, TKey>(StoreContext _dbContext) : IGenericRepository<TEntity, TKey>
 		where TEntity : BaseEntity<TKey>
 		where TKey : IEquatable<TKey>
 	{
 		public async Task<IEnumerable<TEntity>> GetAllAsync(bool withTracking = false)
-			=>withTracking?  await _dbContext.Set<TEntity>().ToListAsync(): await _dbContext.Set<TEntity>().AsNoTracking().ToListAsync();
+		{
+			if (typeof(TEntity) == typeof(Product))
+				return withTracking ?
+					(IEnumerable<TEntity>)await _dbContext.Set<Product>().Include(p => p.Brand).Include(p => p.Category).ToListAsync() 
+					: (IEnumerable<TEntity>)await _dbContext.Set<Product>().Include(p => p.Brand).Include(p => p.Category).AsNoTracking().ToListAsync();
 
+			 return withTracking? 
+			await _dbContext.Set<TEntity>().ToListAsync():
+			await _dbContext.Set<TEntity>().AsNoTracking().ToListAsync();
+
+		}
 		//{
 		//	if (withTracking)
 		//	{

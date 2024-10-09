@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using LinkDev.Talabat.Core.Application.Abstraction.DTOs.Employees;
 using LinkDev.Talabat.Core.Application.Abstraction.DTOs.Products;
+using LinkDev.Talabat.Core.Domain.Entities.Employees;
 using LinkDev.Talabat.Core.Domain.Entities.Products;
 using System;
 using System.Collections.Generic;
@@ -19,6 +21,7 @@ namespace LinkDev.Talabat.Core.Application
 
             CreateMap<ProductBrand, BrandDto>();
             CreateMap<ProductCategory, CategoryDto>();
+            CreateMap<Employee, EmployeeDto>();
         }
     }
 }

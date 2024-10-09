@@ -6,7 +6,7 @@ using System.Collections.Concurrent;
 
 namespace LinkDev.Talabat.Infrastructure.Persistence.UnitOfWork
 {
-	internal class UnitOfWork : IUnitOfWork
+	public class UnitOfWork : IUnitOfWork
 	{
 		private readonly StoreContext _dbContext;
 		///private readonly Lazy<IGenericRepository<Product,int>> _productRepository;

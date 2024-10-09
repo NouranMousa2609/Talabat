@@ -18,9 +18,19 @@ namespace LinkDev.Talabat.APIs.Controllers.Controllers.Products
 		public async Task<ActionResult<IEnumerable<ReturnedProductDto>>> GetProducts()
 		{
 			var products = await serviceManager.ProductService.GetProductsAsync();
+
 			return Ok();
 		}
 
+		[HttpGet("{id:int}")] //GET: Base/api/Products
+		public async Task<ActionResult<IEnumerable<ReturnedProductDto>>> GetProduct(int id)
+		{
+			var products = await serviceManager.ProductService.GetProductAsync(id);
+			if (products == null) 
+				return NotFound(new {StatusCode = 404,message= "not found"});
+
+			return Ok();
+		}
 
 
 

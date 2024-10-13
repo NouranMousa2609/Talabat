@@ -14,9 +14,9 @@ namespace LinkDev.Talabat.Core.Application.Services.Products
 {
 	public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductService
 	{
-		public async Task<IEnumerable<ReturnedProductDto>> GetProductsAsync(string? sort, int? brandId, int? categoryId)
+		public async Task<IEnumerable<ReturnedProductDto>> GetProductsAsync(ProductSpecificationParams specificationParams)
 		{
-			var spec = new ProductWithBrandAndCategorySpecifications(sort,  brandId,  categoryId);
+			var spec = new ProductWithBrandAndCategorySpecifications(specificationParams.sort, specificationParams.brandId, specificationParams.categoryId,specificationParams.PageSize,specificationParams.PageIndex);
 
 
 

@@ -15,6 +15,9 @@ namespace LinkDev.Talabat.Core.Domain.Contracts.Specifications
 		public List<Expression<Func<TEntity, object>>> Includes { get; set; } = new List<Expression<Func<TEntity, object>>>();
 		public Expression<Func<TEntity, object>>? OrderBy { get; set; }
 		public Expression<Func<TEntity, object>>? OrderByDesc { get; set; }
+		public int Skip { get ; set; }
+		public int Take { get ; set; }
+		public bool IsPaginationEnabled { get; set; }
 
 		protected BaseSpecifications()
 		{
@@ -44,6 +47,14 @@ namespace LinkDev.Talabat.Core.Domain.Contracts.Specifications
 		private protected virtual void AddOrderByDesc(Expression<Func<TEntity, object>> OrderByDescExpression)
 		{
 			OrderByDesc = OrderByDescExpression;
+		}
+
+		private protected void ApplyPagination(int skip , int take) 
+		{ 
+
+		IsPaginationEnabled = true;
+			Skip = skip;
+			Take = take;
 		}
 	}
 }

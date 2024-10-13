@@ -1,4 +1,5 @@
-﻿using LinkDev.Talabat.Core.Application.Abstraction.DTOs.Products;
+﻿using LinkDev.Talabat.Core.Application.Abstraction.Common;
+using LinkDev.Talabat.Core.Application.Abstraction.DTOs.Products;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace LinkDev.Talabat.Core.Application.Abstraction.Services.Products
     public interface IProductService
     {
 
-        Task<IEnumerable<ReturnedProductDto>> GetProductsAsync(ProductSpecificationParams specificationParams);
+        Task<Pagination<ReturnedProductDto>> GetProductsAsync(ProductSpecificationParams specificationParams);
 
 
         Task<ReturnedProductDto> GetProductAsync(int id);

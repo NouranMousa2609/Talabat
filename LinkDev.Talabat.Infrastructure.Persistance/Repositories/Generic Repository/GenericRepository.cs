@@ -44,6 +44,10 @@ namespace LinkDev.Talabat.Infrastructure.Persistence.Repositories
 		//	return await _dbContext.Set<TEntity>().AsNoTracking().ToListAsync();
 		//}
 
+		public  async Task<int> GetCountAsync(ISpecifications<TEntity, TKey> spec)
+		{
+			return await ApplySpecifications(spec).CountAsync();
+		}
 		public async Task<TEntity?> GetAsync(TKey id)
 		{
 			//if (typeof(TEntity) == typeof(Product))
@@ -73,5 +77,7 @@ namespace LinkDev.Talabat.Infrastructure.Persistence.Repositories
 			return SpecificationsEvaluator<TEntity, TKey>.GetQuery(_dbContext.Set<TEntity>(), spec);
 
 		}
+
+		
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using LinkDev.Talabat.Core.Domain.Common;
-using LinkDev.Talabat.Core.Domain.Contracts.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;

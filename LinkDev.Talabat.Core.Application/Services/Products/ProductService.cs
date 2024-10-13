@@ -8,8 +8,8 @@ using LinkDev.Talabat.Core.Application.Abstraction.Common;
 using LinkDev.Talabat.Core.Application.Abstraction.DTOs.Products;
 using LinkDev.Talabat.Core.Application.Abstraction.Services.Products;
 using LinkDev.Talabat.Core.Domain.Contracts.Presistence;
-using LinkDev.Talabat.Core.Domain.Contracts.Specifications;
-using LinkDev.Talabat.Core.Domain.Contracts.Specifications.Products;
+using LinkDev.Talabat.Core.Domain.Specifications;
+using LinkDev.Talabat.Core.Domain.Specifications.Products;
 using LinkDev.Talabat.Core.Domain.Entities.Products;
 namespace LinkDev.Talabat.Core.Application.Services.Products
 {

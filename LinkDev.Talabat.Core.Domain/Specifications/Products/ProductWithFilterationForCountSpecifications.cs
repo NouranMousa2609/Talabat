@@ -10,9 +10,11 @@ namespace LinkDev.Talabat.Core.Domain.Specifications.Products
 {
     public class ProductWithFilterationForCountSpecifications : BaseSpecifications<Product, int>
     {
-        public ProductWithFilterationForCountSpecifications(int? brandId, int? categoryId)
+        public ProductWithFilterationForCountSpecifications(int? brandId, int? categoryId,string? Search)
            : base(p =>
-            (!brandId.HasValue || p.BrandId == brandId.Value)
+			 (string.IsNullOrEmpty(Search) || p.NormalizedName.Contains(Search))
+			   &&
+			(!brandId.HasValue || p.BrandId == brandId.Value)
               &&
             (!categoryId.HasValue || p.CategoryId == categoryId.Value)
             )

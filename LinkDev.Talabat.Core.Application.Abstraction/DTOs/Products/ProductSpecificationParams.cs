@@ -13,6 +13,14 @@ namespace LinkDev.Talabat.Core.Application.Abstraction.DTOs.Products
 		public int? brandId { get; set; }
 		
 		public int? categoryId { get; set; }
+		private string? search;
+
+		public string? Search
+		{
+			get { return search; }
+			set { search = value?.ToUpper(); }
+		}
+
 
 		public int PageIndex { get; set; } = 1;
 

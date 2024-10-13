@@ -10,11 +10,35 @@ namespace LinkDev.Talabat.Core.Domain.Contracts.Specifications.Products
 {
 	public class ProductWithBrandAndCategorySpecifications : BaseSpecifications<Product, int>
 	{
-        public ProductWithBrandAndCategorySpecifications():base()
+        public ProductWithBrandAndCategorySpecifications(string? sort):base()
         {
 			AddIncludes();
 
+			AddOrderBy(P => P.Name);
 
+
+			if (!string.IsNullOrEmpty(sort))
+			{
+				switch (sort) {
+
+					case "nameDesc":
+					AddOrderBy(P => P.Name);
+						break;
+
+					case "priceAsc":
+						//OrderBy = P => P.Price;
+						AddOrderBy(P => P.Price);
+						break;
+
+					case "priceDesc":
+						AddOrderByDesc(P => P.Price);
+						break;
+
+					default:
+						break;
+
+				}
+			}
 		}
         public ProductWithBrandAndCategorySpecifications(int id):base(id)
         {
@@ -24,12 +48,15 @@ namespace LinkDev.Talabat.Core.Domain.Contracts.Specifications.Products
 
 		}
 
-        private void AddIncludes()
-        {
-			Includes.Add(P => P.Brand!);
-			Includes.Add(P => P.Category!);
+		private protected override void AddIncludes()
+		{
+			base.AddIncludes();
+			
+				Includes.Add(P => P.Brand!);
+				Includes.Add(P => P.Category!);
 
+			
 		}
-    }
+	}
 	
 }

@@ -30,6 +30,12 @@ namespace LinkDev.Talabat.Infrastructure.Persistence.Repositories
 
 		}
 
+		public async Task<IEnumerable<TEntity>> GetAllWithSpecAsync(ISpecifications<TEntity, TKey> spec, bool withTracking = false)
+		{
+			return await ApplySpecifications(spec).ToListAsync();
+		}
+
+
 		//{
 		//	if (withTracking)
 		//	{
@@ -54,11 +60,7 @@ namespace LinkDev.Talabat.Infrastructure.Persistence.Repositories
 
 		public void Update(TEntity entity)=> _dbContext.Set<TEntity>().Update(entity);
 
-		public async Task<IEnumerable<TEntity>> GetAllWithSpecAsync(ISpecifications<TEntity, TKey> spec, bool withTracking = false)
-		{
-			return await ApplySpecifications(spec).ToListAsync();
-		}
-
+		
 		public async Task<TEntity?> GetWithSpecAsync(ISpecifications<TEntity, TKey> spec)
 		{
 			return await ApplySpecifications(spec).FirstOrDefaultAsync();

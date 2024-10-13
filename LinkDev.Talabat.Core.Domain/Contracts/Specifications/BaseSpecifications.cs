@@ -12,34 +12,38 @@ namespace LinkDev.Talabat.Core.Domain.Contracts.Specifications
 		where TKey : IEquatable<TKey>
 	{
 		public Expression<Func<TEntity, bool>>? Criteria { get; set; } = null;
-		public List<Expression<Func<TEntity, object>>> Includes { get; set; } =  new List<Expression<Func<TEntity, object>>>();
+		public List<Expression<Func<TEntity, object>>> Includes { get; set; } = new List<Expression<Func<TEntity, object>>>();
 		public Expression<Func<TEntity, object>>? OrderBy { get; set; }
 		public Expression<Func<TEntity, object>>? OrderByDesc { get; set; }
 
-		public BaseSpecifications()
-        {
-			//Criteria = null;
-        }
+		protected BaseSpecifications()
+		{
 
-        public BaseSpecifications(TKey id)
-        {
-            Criteria = E=>E.Id.Equals(id);
-			
+		}
+		protected BaseSpecifications(Expression<Func<TEntity, bool>>? CriteriaExpression)
+		{
+			Criteria = CriteriaExpression;
+		}
+
+		protected BaseSpecifications(TKey id)
+		{
+			Criteria = E => E.Id.Equals(id);
+
 		}
 
 		private protected virtual void AddIncludes()
 		{
-			
+
 
 		}
 
-		private protected virtual void AddOrderBy (Expression<Func<TEntity, object>> OrderByExpression)
+		private protected virtual void AddOrderBy(Expression<Func<TEntity, object>> OrderByExpression)
 		{
 			OrderBy = OrderByExpression;
 		}
-		private protected virtual void AddOrderByDesc (Expression<Func<TEntity, object>> OrderByDescExpression)
+		private protected virtual void AddOrderByDesc(Expression<Func<TEntity, object>> OrderByDescExpression)
 		{
 			OrderByDesc = OrderByDescExpression;
 		}
-    }
+	}
 }

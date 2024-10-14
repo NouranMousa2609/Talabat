@@ -1,6 +1,6 @@
 ﻿using LinkDev.Talabat.Core.Domain.Entities.Products;
 using System.Text.Json;
-
+using LinkDev.Talabat.Core.Domain.Contracts.Presistence;
 namespace LinkDev.Talabat.Infrastructure.Persistence.Data
 {
 	public class StoreContextInitializer(StoreContext _DbContext) : IStoreContextInitializer

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LinkDev.Talabat.Core.Domain.Contracts.Specifications.Employees;
+using LinkDev.Talabat.Core.Domain.Specifications.Employees;
 
 
 namespace LinkDev.Talabat.Core.Application.Services.Employees

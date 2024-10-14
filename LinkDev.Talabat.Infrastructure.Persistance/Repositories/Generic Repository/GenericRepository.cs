@@ -1,6 +1,6 @@
 ﻿using LinkDev.Talabat.Core.Domain.Common;
+using LinkDev.Talabat.Core.Domain.Contracts;
 using LinkDev.Talabat.Core.Domain.Contracts.Presistence;
-using LinkDev.Talabat.Core.Domain.Contracts.Specifications;
 using LinkDev.Talabat.Core.Domain.Entities.Products;
 using LinkDev.Talabat.Infrastructure.Persistence.Data;
 using LinkDev.Talabat.Infrastructure.Persistence.Repositories.Generic_Repository;
@@ -30,6 +30,12 @@ namespace LinkDev.Talabat.Infrastructure.Persistence.Repositories
 
 		}
 
+		public async Task<IEnumerable<TEntity>> GetAllWithSpecAsync(ISpecifications<TEntity, TKey> spec, bool withTracking = false)
+		{
+			return await ApplySpecifications(spec).ToListAsync();
+		}
+
+
 		//{
 		//	if (withTracking)
 		//	{
@@ -38,6 +44,10 @@ namespace LinkDev.Talabat.Infrastructure.Persistence.Repositories
 		//	return await _dbContext.Set<TEntity>().AsNoTracking().ToListAsync();
 		//}
 
+		public  async Task<int> GetCountAsync(ISpecifications<TEntity, TKey> spec)
+		{
+			return await ApplySpecifications(spec).CountAsync();
+		}
 		public async Task<TEntity?> GetAsync(TKey id)
 		{
 			//if (typeof(TEntity) == typeof(Product))
@@ -54,11 +64,7 @@ namespace LinkDev.Talabat.Infrastructure.Persistence.Repositories
 
 		public void Update(TEntity entity)=> _dbContext.Set<TEntity>().Update(entity);
 
-		public async Task<IEnumerable<TEntity>> GetAllWithSpecAsync(ISpecifications<TEntity, TKey> spec, bool withTracking = false)
-		{
-			return await ApplySpecifications(spec).ToListAsync();
-		}
-
+		
 		public async Task<TEntity?> GetWithSpecAsync(ISpecifications<TEntity, TKey> spec)
 		{
 			return await ApplySpecifications(spec).FirstOrDefaultAsync();
@@ -71,5 +77,7 @@ namespace LinkDev.Talabat.Infrastructure.Persistence.Repositories
 			return SpecificationsEvaluator<TEntity, TKey>.GetQuery(_dbContext.Set<TEntity>(), spec);
 
 		}
+
+		
 	}
 }

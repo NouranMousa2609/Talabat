@@ -1,5 +1,4 @@
 ﻿using LinkDev.Talabat.Core.Domain.Common;
-using LinkDev.Talabat.Core.Domain.Contracts.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +16,7 @@ namespace LinkDev.Talabat.Core.Domain.Contracts.Presistence
         Task<TEntity?> GetAsync(TKey id);
         Task<TEntity?> GetWithSpecAsync(ISpecifications<TEntity, TKey> spec);
 
+        Task <int> GetCountAsync (ISpecifications<TEntity,TKey>spec);
         Task AddAysnc(TEntity entity);
 
         void Delete(TEntity entity);

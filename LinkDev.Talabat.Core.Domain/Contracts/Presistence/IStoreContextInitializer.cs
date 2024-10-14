@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinkDev.Talabat.Infrastructure.Persistence.Data
+namespace LinkDev.Talabat.Core.Domain.Contracts.Presistence
 {
 	public interface IStoreContextInitializer
 	{

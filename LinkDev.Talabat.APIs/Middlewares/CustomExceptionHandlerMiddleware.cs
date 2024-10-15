@@ -1,4 +1,5 @@
-﻿using LinkDev.Talabat.APIs.Contollers.Exceptions;
+﻿using Azure.Core;
+using LinkDev.Talabat.APIs.Contollers.Exceptions;
 using LinkDev.Talabat.APIs.Controllers.Errors;
 using System.Net;
 using System.Text.Json;
@@ -24,6 +25,12 @@ namespace LinkDev.Talabat.APIs.Middlewares
 			try
 			{
 				await _next(httpContext);
+
+				//if (httpContext.Response.StatusCode == (int)HttpStatusCode.NotFound)
+				//{
+				//	var response = new ApiResponse((int)HttpStatusCode.NotFound, $"the requested endpoint:{httpContext.Response} is not found");
+				//	await httpContext.Response.WriteAsync(response.ToString());
+				//}
 
 			}
 			catch (Exception ex)

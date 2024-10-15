@@ -81,6 +81,9 @@ namespace LinkDev.Talabat.APIs
 			}
 
 			app.UseHttpsRedirection();
+
+			app.UseStatusCodePagesWithReExecute("/Errors/{0}");
+
 			app.UseAuthentication();
 
 			app.UseAuthorization();

@@ -1,4 +1,4 @@
-﻿using LinkDev.Talabat.APIs.Contollers.Exceptions;
+﻿using LinkDev.Talabat.Core.Application.Abstraction.Common;
 using LinkDev.Talabat.APIs.Controllers.Base;
 using LinkDev.Talabat.APIs.Controllers.Errors;
 using LinkDev.Talabat.Core.Application.Abstraction.DTOs.Products;
@@ -17,8 +17,8 @@ namespace LinkDev.Talabat.APIs.Controllers.Controllers.Buggy
 		[HttpGet("notfound")] //Get: /api/buggy/notfound
 		public IActionResult GetNotFoundRequest()
 		{
-			throw new NotFoundException();
-			//return NotFound(new ApiResponse(404)); //404
+			//throw new NotFoundException();
+			return NotFound(new ApiResponse(404)); //404
 
 		}
 

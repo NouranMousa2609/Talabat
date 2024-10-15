@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LinkDev.Talabat.Core.Application;
 using LinkDev.Talabat.APIs.Controllers.Errors;
+using LinkDev.Talabat.APIs.Middlewares;
 namespace LinkDev.Talabat.APIs
 {
 	public class Program
@@ -64,11 +65,13 @@ namespace LinkDev.Talabat.APIs
 
 			#region Databases Initialization 
 
-			await app.InitializeStoreContextAsync(); 
+			await app.InitializeStoreContextAsync();
 
 			#endregion
 
 			#region Configure Kestrel Middlewares
+
+			app.UseMiddleware<CustomExceptionHandlerMiddleware>();
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())

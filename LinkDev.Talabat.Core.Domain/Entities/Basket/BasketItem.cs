@@ -16,8 +16,8 @@ namespace LinkDev.Talabat.Core.Domain.Entities.Basket
 
 		public int Quantity { get; set; }
 
-		public string? BrandId { get; set; }
-		public string? CategoryId { get; set; }
+		public string? Brand { get; set; }
+		public string? Category { get; set; }
 
 	}
 }

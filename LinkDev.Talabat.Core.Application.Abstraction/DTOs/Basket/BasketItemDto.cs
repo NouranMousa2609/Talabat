@@ -24,8 +24,8 @@ namespace LinkDev.Talabat.Core.Application.Abstraction.DTOs.Basket
         [Range(1, int.MaxValue, ErrorMessage = "Quantity Must be greater than one")]
         public int Quantity { get; set; }
 
-        public string? BrandId { get; set; }
-        public string? CategoryId { get; set; }
+        public string? Brand { get; set; }
+        public string? Category { get; set; }
 
     }
 }

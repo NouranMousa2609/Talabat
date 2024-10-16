@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using LinkDev.Talabat.Core.Application;
 using LinkDev.Talabat.APIs.Controllers.Errors;
 using LinkDev.Talabat.APIs.Middlewares;
+using LinkDev.Talabat.Infrastructure;
 namespace LinkDev.Talabat.APIs
 {
 	public class Program
@@ -59,8 +60,10 @@ namespace LinkDev.Talabat.APIs
 			builder.Services.AddHttpContextAccessor();
 			builder.Services.AddScoped(typeof(ILoggedInUserService),typeof(LoggedInUserService));
 			//builder.Services.AddPersistenceService(builder.Configuration);
-			DependencyInjection.AddPersistenceService(builder.Services,builder.Configuration);
+			//DependencyInjection.AddPersistenceService(builder.Services,builder.Configuration);
+			builder.Services.AddPersistenceService(builder.Configuration);
 			builder.Services.AddApplicationService();
+			builder.Services.AddInfrastructureServices(builder.Configuration);
 			#endregion
 
 			var app = builder.Build();

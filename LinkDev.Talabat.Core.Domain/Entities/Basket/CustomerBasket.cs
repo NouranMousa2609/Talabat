@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LinkDev.Talabat.Core.Domain.Entities.Basket
 {
-	internal class CustomerBasket
+	public class CustomerBasket
 	{
 		public required string Id { get; set; }
 

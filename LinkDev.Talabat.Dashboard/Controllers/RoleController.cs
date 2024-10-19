@@ -1,5 +1,4 @@
 ﻿using LinkDev.Talabat.Dashboard.Models;
-using LinkDev.Talabat.Dashboard.Views.Role;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;

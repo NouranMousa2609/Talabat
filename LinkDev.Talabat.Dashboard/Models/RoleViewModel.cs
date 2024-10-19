@@ -1,4 +1,4 @@
-﻿namespace LinkDev.Talabat.Dashboard.Views.Role
+﻿namespace LinkDev.Talabat.Dashboard.Models
 {
     public class RoleViewModel
     {

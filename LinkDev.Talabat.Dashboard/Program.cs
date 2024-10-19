@@ -1,3 +1,6 @@
+using LinkDev.Talabat.Infrastructure.Persistence.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace LinkDev.Talabat.Dashboard
 {
 	public class Program
@@ -8,6 +11,10 @@ namespace LinkDev.Talabat.Dashboard
 
 			// Add services to the container.
 			builder.Services.AddControllersWithViews();
+			builder.Services.AddDbContext<StoreContext>(options =>
+			{
+				options.UseSqlServer(builder.Configuration.GetConnectionString("StoreContext"));
+			});
 
 			var app = builder.Build();
 

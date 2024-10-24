@@ -9,6 +9,9 @@ using LinkDev.Talabat.Core.Application;
 using LinkDev.Talabat.APIs.Controllers.Errors;
 using LinkDev.Talabat.APIs.Middlewares;
 using LinkDev.Talabat.Infrastructure;
+using LinkDev.Talabat.Core.Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
+using LinkDev.Talabat.Infrastructure.Persistence.Identity;
 namespace LinkDev.Talabat.APIs
 {
 	public class Program
@@ -64,6 +67,8 @@ namespace LinkDev.Talabat.APIs
 			builder.Services.AddPersistenceService(builder.Configuration);
 			builder.Services.AddApplicationService();
 			builder.Services.AddInfrastructureServices(builder.Configuration);
+
+			builder.Services.AddIdentityService();
 			#endregion
 
 			var app = builder.Build();

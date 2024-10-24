@@ -12,20 +12,24 @@ using System.Threading.Tasks;
 
 namespace LinkDev.Talabat.Infrastructure.Persistence._Identity
 {
-    public class StoreIdentityDbInitializer(StoreIdentityDbContext _DbContext,UserManager<ApplicationUser> _userManager ):DbInitializer(_DbContext) ,IStoreIdentityDbInitializer
+    public class StoreIdentityDbInitializer(StoreIdentityDbContext _DbContext, UserManager<ApplicationUser> _userManager) : DbInitializer(_DbContext), IStoreIdentityDbInitializer
     {
-     
+
 
         public override async Task SeedAsync()
         {
-            var user = new ApplicationUser()
+            if (!_userManager.Users.Any())
             {
-                DisplayName = "Nouran Mousa",
-                UserName="Nouran_Mousa",
-                Email="NouranMousa@gmail.com",
-                PhoneNumber="011111111111"
-            };
-            await _userManager.CreateAsync(user,"P@ssw0rd");
+
+                var user = new ApplicationUser()
+                {
+                    DisplayName = "Nouran Mousa",
+                    UserName = "Nouran_Mousa",
+                    Email = "NouranMousa@gmail.com",
+                    PhoneNumber = "011111111111"
+                };
+                await _userManager.CreateAsync(user, "P@ssw0rd"); 
+            }
         }
     }
 }

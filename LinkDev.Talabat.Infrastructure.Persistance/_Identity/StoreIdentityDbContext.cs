@@ -1,5 +1,5 @@
 ﻿using LinkDev.Talabat.Core.Domain.Entities.Identity;
-using LinkDev.Talabat.Infrastructure.Persistence._Common;
+using LinkDev.Talabat.Infrastructure.Persistence.Common;
 using LinkDev.Talabat.Infrastructure.Persistence._Identity.Config;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

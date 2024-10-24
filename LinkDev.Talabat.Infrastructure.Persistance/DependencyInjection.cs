@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using LinkDev.Talabat.Infrastructure.Persistence.UnitOfWork;
 using LinkDev.Talabat.Core.Domain.Contracts.Presistence;
 using LinkDev.Talabat.Infrastructure.Persistence.Identity;
+using LinkDev.Talabat.Core.Domain.Contracts.Presistence.DbInitializers;
+using LinkDev.Talabat.Infrastructure.Persistence._Identity;
 
 namespace LinkDev.Talabat.Infrastructure.Persistence
 {
@@ -25,8 +27,8 @@ namespace LinkDev.Talabat.Infrastructure.Persistence
             });
 
             //Services. <IStoreContextInitializer, StoreContextInitializer>();
-            Services.AddScoped<IStoreContextInitializer, StoreDbInitializer>();
-            Services.AddScoped(typeof(IStoreContextInitializer), typeof(StoreDbInitializer));
+            Services.AddScoped<IStoreDbInitializer, StoreDbInitializer>();
+            Services.AddScoped(typeof(IStoreDbInitializer), typeof(StoreDbInitializer));
             Services.AddScoped(typeof(ISaveChangesInterceptor), typeof(CustomSaveChangesInterceptor));
             #endregion
 
@@ -40,6 +42,9 @@ namespace LinkDev.Talabat.Infrastructure.Persistence
 
 
             });
+
+            Services.AddScoped(typeof(IStoreIdentityDbInitializer), typeof(StoreIdentityDbInitializer));
+
             #endregion
 
             Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork.UnitOfWork));

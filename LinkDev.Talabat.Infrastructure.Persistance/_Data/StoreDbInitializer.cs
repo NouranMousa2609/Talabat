@@ -1,60 +1,57 @@
 ﻿using LinkDev.Talabat.Core.Domain.Entities.Products;
 using System.Text.Json;
-using LinkDev.Talabat.Core.Domain.Contracts.Presistence;
+using LinkDev.Talabat.Core.Domain.Contracts.Presistence.DbInitializers;
+using LinkDev.Talabat.Infrastructure.Persistence.Common;
 namespace LinkDev.Talabat.Infrastructure.Persistence.Data
 {
-	public class StoreDbInitializer(StoreDbContext _DbContext) : IStoreContextInitializer
+    public class StoreDbInitializer(StoreDbContext _dbContext) :DbInitializer(_dbContext) ,IStoreDbInitializer
 	{
-		//private readonly StoreContext _DbContext;
+    
 
-		//public StoreContextInitializer(StoreContext context)
-  //      {
-		//	_DbContext = context;
-		//}
-        public async Task InitializeAsync()
+        //private readonly StoreContext _DbContext;
+
+        //public StoreContextInitializer(StoreContext context)
+        //      {
+        //	_DbContext = context;
+        //}
+
+
+		public override async Task SeedAsync()
 		{
-			var PendingMigrations =  _DbContext.Database.GetPendingMigrations();
-
-			if (PendingMigrations.Any())
-				await _DbContext.Database.MigrateAsync();
-		}
-
-		public async Task SeedAsync()
-		{
-			if (!_DbContext.Brands.Any())
+			if (!_dbContext.Brands.Any())
 			{
 				var BrandsData = await File.ReadAllTextAsync("../LinkDev.Talabat.Infrastructure.Persistance/Data/Seeds/brands.json");
 				var brands = JsonSerializer.Deserialize<List<ProductBrand>>(BrandsData);
 
 				if (brands?.Count > 0)
 				{
-					await _DbContext.Set<ProductBrand>().AddRangeAsync(brands);
-					await _DbContext.SaveChangesAsync();
+					await _dbContext.Set<ProductBrand>().AddRangeAsync(brands);
+					await _dbContext.SaveChangesAsync();
 
 				}
 			}
 
-			if (!_DbContext.Categories.Any())
+			if (!_dbContext.Categories.Any())
 			{
 				var CategoriesData = await File.ReadAllTextAsync("../LinkDev.Talabat.Infrastructure.Persistance/Data/Seeds/Categories.json");
 				var Categories = JsonSerializer.Deserialize<List<ProductCategory>>(CategoriesData);
 
 				if (Categories?.Count > 0)
 				{
-					await _DbContext.Set<ProductCategory>().AddRangeAsync(Categories);
-					await _DbContext.SaveChangesAsync();
+					await _dbContext.Set<ProductCategory>().AddRangeAsync(Categories);
+					await _dbContext.SaveChangesAsync();
 
 				}
 			}
-			if (!_DbContext.products.Any())
+			if (!_dbContext.products.Any())
 			{
 				var productsData = await File.ReadAllTextAsync("../LinkDev.Talabat.Infrastructure.Persistance/Data/Seeds/products.json");
 				var products = JsonSerializer.Deserialize<List<Product>>(productsData);
 
 				if (products?.Count > 0)
 				{
-					await _DbContext.Set<Product>().AddRangeAsync(products);
-					await _DbContext.SaveChangesAsync();
+					await _dbContext.Set<Product>().AddRangeAsync(products);
+					await _dbContext.SaveChangesAsync();
 
 				}
 			}

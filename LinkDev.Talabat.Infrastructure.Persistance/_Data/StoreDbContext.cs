@@ -1,6 +1,6 @@
 ﻿using LinkDev.Talabat.Core.Domain.Common;
 using LinkDev.Talabat.Core.Domain.Entities.Products;
-using LinkDev.Talabat.Infrastructure.Persistence._Common;
+using LinkDev.Talabat.Infrastructure.Persistence.Common;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Reflection;
 namespace LinkDev.Talabat.Infrastructure.Persistence.Data

@@ -1,5 +1,7 @@
 ﻿using LinkDev.Talabat.Core.Domain.Common;
 using LinkDev.Talabat.Core.Domain.Entities.Products;
+using LinkDev.Talabat.Infrastructure.Persistence._Common;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Reflection;
 namespace LinkDev.Talabat.Infrastructure.Persistence.Data
 {
@@ -17,7 +19,10 @@ namespace LinkDev.Talabat.Infrastructure.Persistence.Data
 		{
 			//modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-			modelBuilder.ApplyConfigurationsFromAssembly(typeof(AssemblyInformations).Assembly);
+			modelBuilder.ApplyConfigurationsFromAssembly(typeof(AssemblyInformations).Assembly,
+				type=>type.GetCustomAttribute<DbContextTypeAttribute>()?.DbContextType == typeof(StoreDbContext));
+
+
 		}
 
 		public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)

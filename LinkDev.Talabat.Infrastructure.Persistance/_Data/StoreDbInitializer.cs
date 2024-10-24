@@ -3,7 +3,7 @@ using System.Text.Json;
 using LinkDev.Talabat.Core.Domain.Contracts.Presistence;
 namespace LinkDev.Talabat.Infrastructure.Persistence.Data
 {
-	public class StoreContextInitializer(StoreContext _DbContext) : IStoreContextInitializer
+	public class StoreDbInitializer(StoreDbContext _DbContext) : IStoreContextInitializer
 	{
 		//private readonly StoreContext _DbContext;
 

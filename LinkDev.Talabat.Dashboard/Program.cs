@@ -11,7 +11,7 @@ namespace LinkDev.Talabat.Dashboard
 
 			// Add services to the container.
 			builder.Services.AddControllersWithViews();
-			builder.Services.AddDbContext<StoreContext>(options =>
+			builder.Services.AddDbContext<StoreDbContext>(options =>
 			{
 				options.UseSqlServer(builder.Configuration.GetConnectionString("StoreContext"));
 			});

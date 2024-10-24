@@ -3,13 +3,13 @@ using LinkDev.Talabat.Core.Domain.Entities.Products;
 using System.Reflection;
 namespace LinkDev.Talabat.Infrastructure.Persistence.Data
 {
-	public class StoreContext : DbContext
+	public class StoreDbContext : DbContext
 	{
 		public DbSet<Product> products { get; set; }
         public DbSet<ProductBrand> Brands { get; set; }
         public DbSet<ProductCategory> Categories { get; set; }
 
-        public StoreContext( DbContextOptions<StoreContext> Options):base(Options) 
+        public StoreDbContext( DbContextOptions<StoreDbContext> Options):base(Options) 
         {
             
         }

@@ -31,20 +31,23 @@ namespace LinkDev.Talabat.APIs
 
 			builder.Services
 				.AddControllers()
-				.ConfigureApiBehaviorOptions(options =>
+                .AddApplicationPart(typeof(Contollers.AssemblyInformation).Assembly)
+                .ConfigureApiBehaviorOptions(options =>
 				    { 
 					options.SuppressModelStateInvalidFilter=false;
 						options.InvalidModelStateResponseFactory = (actionContext) =>
 						{
 							var errors = actionContext.ModelState.Where(p => p.Value!.Errors.Count > 0)
-												   .Select(p => new ApiValidationErrorResponse.ValidationError()
-												   {
-													   Field = p.Key,
-													   Errors = p.Value!.Errors.Select(E=>E.ErrorMessage)
-												   });
+												   .SelectMany(p => p.Value!.Errors)
+												   .Select(e => e.ErrorMessage);
+												   //.Select(p => new ApiValidationErrorResponse.ValidationError()
+												   //{
+													  // Field = p.Key,
+													  // Errors = p.Value!.Errors.Select(E=>E.ErrorMessage)
+												   //});
 							return new BadRequestObjectResult(new ApiValidationErrorResponse() { Errors = errors });
 						};
-                    }).AddApplicationPart(typeof(Contollers.AssemblyInformation).Assembly);
+                    });
 
 			///builder.Services.Configure<ApiBehaviorOptions>(options =>
 			///{

@@ -28,7 +28,7 @@ namespace LinkDev.Talabat.Core.Application.Services.Auth
             //if (result.RequiresTwoFactor) throw new UnAuthorizedException("Require two-factor Authentication");
 
             if (!result.Succeeded) throw new UnAuthorizedException("Invalid Login");
-
+             
             var response = new UserDto()
             {
                 Id = user.Id,

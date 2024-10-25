@@ -3,7 +3,10 @@ using LinkDev.Talabat.Core.Application.Abstraction.Services.Auth;
 using LinkDev.Talabat.Core.Application.Services.Auth;
 using LinkDev.Talabat.Core.Domain.Entities.Identity;
 using LinkDev.Talabat.Infrastructure.Persistence.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace LinkDev.Talabat.APIs.Extensions
 {
@@ -33,10 +36,39 @@ namespace LinkDev.Talabat.APIs.Extensions
             })
                 .AddEntityFrameworkStores<StoreIdentityDbContext>();
 
-            services.AddScoped(typeof(IAuthService), typeof(AuthService));
-            services.AddScoped(typeof(Func<IAuthService>), (serviceprovider) =>
+            //services.AddScoped(typeof(IAuthService), typeof(AuthService));
+            //services.AddScoped(typeof(Func<IAuthService>), (serviceprovider) =>
+            //{
+            //    return()=> serviceprovider.GetServices<IAuthService>();
+            //});
+
+            services.AddScoped<IAuthService, AuthService>();
+
+            services.AddScoped<Func<IAuthService>>(serviceProvider =>
+                () => serviceProvider.GetRequiredService<IAuthService>());
+
+            services.AddAuthentication((AuthOptions) =>
             {
-                return()=> serviceprovider.GetServices<IAuthService>();
+                AuthOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                AuthOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer((ConfigOptions)=>
+            {
+                ConfigOptions.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                {
+                    ValidateAudience = true,
+                    ValidateIssuer = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+
+                    ClockSkew=TimeSpan.FromMinutes(0),
+                    ValidIssuer = configuration["jwtSettings:issuer"],
+                    ValidAudience= configuration["jwtSettings:audience"],
+                    IssuerSigningKey= new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["jwtSettings:Key"]!))
+
+                };
+
+
+
             });
             return services;
         }

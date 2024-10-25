@@ -3,6 +3,8 @@ using LinkDev.Talabat.Core.Application.Abstraction.Services.Auth;
 using LinkDev.Talabat.Core.Application.Exceptions;
 using LinkDev.Talabat.Core.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,8 +12,12 @@ using System.Text;
 
 namespace LinkDev.Talabat.Core.Application.Services.Auth
 {
-    public class AuthService(UserManager<ApplicationUser> _userManager, SignInManager <ApplicationUser> _signInManager) : IAuthService
+    public class AuthService(
+        IOptions<JwtSettings> jwtSettings,
+        UserManager<ApplicationUser> _userManager,
+        SignInManager <ApplicationUser> _signInManager) : IAuthService
     {
+        private readonly JwtSettings _jwtSettings = jwtSettings.Value;
         public async Task<UserDto> LoginAsync(LoginDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -76,14 +82,14 @@ namespace LinkDev.Talabat.Core.Application.Services.Auth
 
             }.Union(userClaims).Union(roleAsClaims);
 
-            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-256-bit-secret"));
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var signInCredintials=new SigningCredentials(symmetricSecurityKey,SecurityAlgorithms.HmacSha256);
 
             var tokenObj = new JwtSecurityToken
                 (
-                issuer: "TalabatIdentity",
-                audience: "TalabatUsers",
-                expires: DateTime.UtcNow.AddMinutes(10),
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes),
                 claims: authClaims,
                 signingCredentials: signInCredintials
                 );

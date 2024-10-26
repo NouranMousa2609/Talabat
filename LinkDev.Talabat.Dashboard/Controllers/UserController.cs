@@ -1,27 +1,28 @@
-﻿using LinkDev.Talabat.Dashboard.Models;
+﻿using LinkDev.Talabat.Core.Domain.Entities.Identity;
+using LinkDev.Talabat.Dashboard.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LinkDev.Talabat.Dashboard.Controllers
 {
-    public class UserController(UserManager<IdentityUser> _userManager,RoleManager<IdentityRole> _roleManager) : Controller
+    public class UserController(UserManager<ApplicationUser> _userManager,RoleManager<IdentityRole> _roleManager) : Controller
     {
         public async Task <IActionResult> Index()
         {
             var users =await _userManager.Users.Select(U=>new UserViewModel()
             {
                 Id=U.Id,
-                //DisplayName=U.DisplayName,
+                DisplayName=U.DisplayName,
                 UserName =U.UserName!,
                 PhoneNumber=U.PhoneNumber!,
                 Email=U.Email!,
-                Roles=_userManager.GetRolesAsync(U).Result,
+                //Roles=_userManager.GetRolesAsync(U).Result,
 
             }).ToListAsync();
             return View(users);
         }
-
+        
         public async Task<IActionResult> Edit(string id)
         {
             var user = await _userManager.FindByIdAsync(id);

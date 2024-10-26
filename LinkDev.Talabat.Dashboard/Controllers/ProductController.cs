@@ -2,6 +2,7 @@
 using LinkDev.Talabat.Core.Domain.Contracts.Presistence;
 using LinkDev.Talabat.Core.Domain.Entities.Products;
 using LinkDev.Talabat.Dashboard.Helper;
+using LinkDev.Talabat.Dashboard.Helpers;
 using LinkDev.Talabat.Dashboard.Models;
 using Microsoft.AspNetCore.Mvc;
 using static System.Net.Mime.MediaTypeNames;
@@ -13,7 +14,7 @@ namespace LinkDev.Talabat.Dashboard.Controllers
         public async Task<IActionResult> Index()
         {
             var products = await _unitOfWork.GetRepository<Product, int>().GetAllAsync();
-            var mappedProduct = _mapper.Map<IReadOnlyList<ProductViewModel>>(products);
+            var mappedProduct = _mapper.Map<IEnumerable<Product>,IEnumerable<ProductViewModel>>(products);
             return View(mappedProduct);
         }
 
@@ -33,8 +34,17 @@ namespace LinkDev.Talabat.Dashboard.Controllers
 
                 }
                 else
+                {
                     product.PictureUrl = "images/products/glazed-donuts.png";
+                }
                 var mappedProduct = _mapper.Map<Product>(product);
+
+
+                string userName = User.Identity?.Name ?? "Nouran_Mousa";
+                mappedProduct.CreatedBy = userName;
+                 mappedProduct.LastModifiedBy = userName;
+                mappedProduct.NormalizedName = product.Name?.ToUpperInvariant();
+
                 await _unitOfWork.GetRepository<Product, int>().AddAysnc(mappedProduct);
 
                 await _unitOfWork.CompleteAsync();
@@ -59,32 +69,39 @@ namespace LinkDev.Talabat.Dashboard.Controllers
             if (ModelState.IsValid)
             {
                 if (product.Image != null)
-                {
-                    PictureSettings.DeleteFile(product.PictureUrl, "products");
-                    product.PictureUrl = PictureSettings.UploadFile(product.Image, "products");
+                    if (product.PictureUrl != null)
+                    {
+                        PictureSettings.DeleteFile(product.PictureUrl, "products");
+                        product.PictureUrl = PictureSettings.UploadFile(product.Image, "products");
 
-                }
-                else
-                    product.PictureUrl = PictureSettings.UploadFile(product.Image, "products");
-                var mappedProduct= _mapper.Map<Product>(product);
-                _unitOfWork.GetRepository<Product,int>().Update(mappedProduct);
+                    }
+                    else
+                        product.PictureUrl = PictureSettings.UploadFile(product.Image, "products");
+
+                var mappedProduct = _mapper.Map<Product>(product);
+                string userName = User.Identity?.Name ?? "Nouran_Mousa";
+                mappedProduct.CreatedBy = userName;
+                mappedProduct.LastModifiedBy = userName;
+                mappedProduct.NormalizedName = product.Name?.ToUpperInvariant();
+
+                _unitOfWork.GetRepository<Product, int>().Update(mappedProduct);
                 var result = await _unitOfWork.CompleteAsync();
-                if(result>0)
+                if (result > 0)
                     return RedirectToAction("Index");
             }
             return View(product);
         }
 
-        public async Task<IActionResult> Delete (int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var product = await _unitOfWork.GetRepository<Product,int>().GetAsync(id);
-            var mappedProduct =_mapper.Map<ProductViewModel>(product);
+            var product = await _unitOfWork.GetRepository<Product, int>().GetAsync(id);
+            var mappedProduct = _mapper.Map<ProductViewModel>(product);
             return View(mappedProduct);
         }
         [HttpPost]
-        public async Task<IActionResult> Delete (int id, ProductViewModel productViewModel)
+        public async Task<IActionResult> Delete(int id, ProductViewModel productViewModel)
         {
-            if (id !=productViewModel.Id)
+            if (id != productViewModel.Id)
                 return NotFound();
             try
             {
@@ -99,7 +116,7 @@ namespace LinkDev.Talabat.Dashboard.Controllers
                 return RedirectToAction("Index");
 
             }
-            catch (System.Exception )
+            catch (System.Exception)
             {
                 return View(productViewModel);
             }

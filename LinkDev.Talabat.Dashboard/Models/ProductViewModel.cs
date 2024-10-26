@@ -27,6 +27,8 @@ namespace LinkDev.Talabat.Dashboard.Models
         public int? BrandId { get; set; } 
         public ProductBrand? Brand { get; set; }
 
+        
+
 
     }
 }

@@ -26,9 +26,13 @@ namespace LinkDev.Talabat.Infrastructure.Persistence._Identity
                     DisplayName = "Nouran Mousa",
                     UserName = "Nouran_Mousa",
                     Email = "NouranMousa@gmail.com",
-                    PhoneNumber = "011111111111"
+                    PhoneNumber = "011111111111",
+                    
                 };
-                await _userManager.CreateAsync(user, "P@ssw0rd"); 
+                
+                await _userManager.CreateAsync(user, "P@ssw0rd");
+                await _userManager.AddToRolesAsync(user, new[] {"Admin"});
+                
             }
         }
     }

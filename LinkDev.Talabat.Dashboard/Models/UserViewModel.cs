@@ -12,6 +12,6 @@ namespace LinkDev.Talabat.Dashboard.Models
 
         public string PhoneNumber { get; set; }= null!;
 
-        public IEnumerable<String> Roles { get; set; }= null!;
+        public IEnumerable<string> Roles { get; set; } = new List<string>();
     }
 }

@@ -62,5 +62,6 @@ namespace LinkDev.Talabat.Core.Application.Services.Products
 			var mappedcategories = mapper.Map<IEnumerable<CategoryDto>>(categories);
 			return mappedcategories;
 		}
+
 	}
 }

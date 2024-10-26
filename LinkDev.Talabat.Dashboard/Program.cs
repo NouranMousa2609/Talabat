@@ -1,6 +1,9 @@
+using LinkDev.Talabat.Core.Domain.Contracts.Presistence;
 using LinkDev.Talabat.Core.Domain.Entities.Identity;
+using LinkDev.Talabat.Dashboard.Helper;
 using LinkDev.Talabat.Infrastructure.Persistence.Data;
 using LinkDev.Talabat.Infrastructure.Persistence.Identity;
+using LinkDev.Talabat.Infrastructure.Persistence.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,6 +45,11 @@ namespace LinkDev.Talabat.Dashboard
                 identityOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
 
             }).AddEntityFrameworkStores<StoreIdentityDbContext>();
+
+            builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+            builder.Services.AddAutoMapper(typeof(MapsProfile));
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -61,7 +69,7 @@ namespace LinkDev.Talabat.Dashboard
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Account}/{action=Login}/{id?}");
+                pattern: "{controller=Auth}/{action=Login}/{id?}");
 
             app.Run();
         }

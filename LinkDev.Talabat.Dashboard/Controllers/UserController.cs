@@ -8,21 +8,42 @@ namespace LinkDev.Talabat.Dashboard.Controllers
 {
     public class UserController(UserManager<ApplicationUser> _userManager,RoleManager<IdentityRole> _roleManager) : Controller
     {
-        public async Task <IActionResult> Index()
-        {
-            var users =await _userManager.Users.Select(U=>new UserViewModel()
-            {
-                Id=U.Id,
-                DisplayName=U.DisplayName,
-                UserName =U.UserName!,
-                PhoneNumber=U.PhoneNumber!,
-                Email=U.Email!,
-                //Roles=_userManager.GetRolesAsync(U).Result,
+        //public async Task <IActionResult> Index()
+        //{
+        //    var users =await _userManager.Users.Select(U=>new UserViewModel()
+        //    {
+        //        Id=U.Id,
+        //        DisplayName=U.DisplayName,
+        //        UserName =U.UserName!,
+        //        PhoneNumber=U.PhoneNumber!,
+        //        Email=U.Email!,
+        //        Roles=_userManager.GetRolesAsync(U).Result,
 
-            }).ToListAsync();
-            return View(users);
+        //    }).ToListAsync();
+        //    return View(users);
+        //}
+        public async Task<IActionResult> Index()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            var userViewModels = new List<UserViewModel>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                userViewModels.Add(new UserViewModel()
+                {
+                    Id = user.Id,
+                    DisplayName = user.DisplayName,
+                    UserName = user.UserName!,
+                    PhoneNumber = user.PhoneNumber!,
+                    Email = user.Email!,
+                    Roles = roles.ToList()
+                });
+            }
+
+            return View(userViewModels);
         }
-        
+
         public async Task<IActionResult> Edit(string id)
         {
             var user = await _userManager.FindByIdAsync(id);

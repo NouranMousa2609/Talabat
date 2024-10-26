@@ -1,14 +1,14 @@
 ﻿@model UserRoleViewModel
 
 @{
-    ViewData["Title"] = "Update";
+    ViewData["Title"] = "Edit";
 }
 
 <h1>Edit @Model.UserName</h1>
 <hr />
 <div class="container">
 
-    <form method="post" asp-action="Update">
+    <form method="post" asp-action="Edit">
         <input asp-for="userId" class="form-control" hidden />
         <div>
             <label asp-for="UserName" class="col-form-label"></label>

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.Talabat.Dashboard.Controllers
 {
-    public class AccountController(UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager) : Controller
+    public class AuthController(UserManager<ApplicationUser> _userManager, SignInManager<ApplicationUser> _signInManager) : Controller
     {
         public IActionResult Login()
         {
@@ -22,11 +22,11 @@ namespace LinkDev.Talabat.Dashboard.Controllers
                 return RedirectToAction("Login");
             }
             var result= await _signInManager.CheckPasswordSignInAsync(user,model.Password,false);
-            if (!result.Succeeded /*|| await _userManager.IsInRoleAsync(user,"Admin")*/)
+            if (!result.Succeeded || !await _userManager.IsInRoleAsync(user, "Admin"))
             {
                 ModelState.AddModelError(string.Empty, "Invalid Email");
                 return RedirectToAction("Login");
-
+                
             }
             return RedirectToAction("Index","Home");
 
@@ -34,7 +34,7 @@ namespace LinkDev.Talabat.Dashboard.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction(nameof(Login));
+            return RedirectToAction("Login","Auth");
         }
     }
 }

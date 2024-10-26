@@ -18,9 +18,9 @@
                 <th>@Html.DisplayNameFor(r => r.DisplayName)</th>
                 <th>@Html.DisplayNameFor(r => r.Email)</th>
                 <th>@Html.DisplayNameFor(r => r.PhoneNumber)</th>
+                <th>Roles</th>
                 <th>Actions</th>
-@*                 <th>Roles</th>
- *@            </tr>
+           </tr>
         </thead>
         <tbody>
             @foreach (var user in Model)
@@ -30,8 +30,8 @@
                     <td>@user.DisplayName</td>
                     <td>@user.Email</td>
                     <td>@user.PhoneNumber</td>
-@*                     <td @string.Join(",",user.Roles.ToList())></td>
- *@                    <td>
+                    <td>@string.Join(", ", user.Roles)</td>
+                    <td>
                         <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
                     </td>
                 </tr>

@@ -1,17 +1,15 @@
-using LinkDev.Talabat.APIs.Extensions;
-using LinkDev.Talabat.APIs.Services;
-using LinkDev.Talabat.Core.Application.Abstraction;
-using LinkDev.Talabat.Infrastructure.Persistence;
-using LinkDev.Talabat.Infrastructure.Persistence.Data;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using LinkDev.Talabat.Core.Application;
 using LinkDev.Talabat.APIs.Controllers.Errors;
+using LinkDev.Talabat.APIs.Extensions;
 using LinkDev.Talabat.APIs.Middlewares;
+using LinkDev.Talabat.APIs.Services;
+using LinkDev.Talabat.Core.Application;
+using LinkDev.Talabat.Core.Application.Abstraction;
 using LinkDev.Talabat.Infrastructure;
+using LinkDev.Talabat.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Mvc;
 namespace LinkDev.Talabat.APIs
 {
-	public class Program
+    public class Program
 	{
 		//[FromServices]
 		//public static StoreContext StoreContext { get; set; } = null!;
@@ -28,20 +26,23 @@ namespace LinkDev.Talabat.APIs
 
 			builder.Services
 				.AddControllers()
-				.ConfigureApiBehaviorOptions(options =>
+                .AddApplicationPart(typeof(Contollers.AssemblyInformation).Assembly)
+                .ConfigureApiBehaviorOptions(options =>
 				    { 
 					options.SuppressModelStateInvalidFilter=false;
 						options.InvalidModelStateResponseFactory = (actionContext) =>
 						{
 							var errors = actionContext.ModelState.Where(p => p.Value!.Errors.Count > 0)
-												   .Select(p => new ApiValidationErrorResponse.ValidationError()
-												   {
-													   Field = p.Key,
-													   Errors = p.Value!.Errors.Select(E=>E.ErrorMessage)
-												   });
+												   .SelectMany(p => p.Value!.Errors)
+												   .Select(e => e.ErrorMessage);
+												   //.Select(p => new ApiValidationErrorResponse.ValidationError()
+												   //{
+													  // Field = p.Key,
+													  // Errors = p.Value!.Errors.Select(E=>E.ErrorMessage)
+												   //});
 							return new BadRequestObjectResult(new ApiValidationErrorResponse() { Errors = errors });
 						};
-                    }).AddApplicationPart(typeof(Contollers.AssemblyInformation).Assembly);
+                    });
 
 			///builder.Services.Configure<ApiBehaviorOptions>(options =>
 			///{
@@ -64,6 +65,8 @@ namespace LinkDev.Talabat.APIs
 			builder.Services.AddPersistenceService(builder.Configuration);
 			builder.Services.AddApplicationService();
 			builder.Services.AddInfrastructureServices(builder.Configuration);
+
+			builder.Services.AddIdentityService(builder.Configuration);
 			#endregion
 
 			var app = builder.Build();

@@ -1,4 +1,5 @@
 ﻿using LinkDev.Talabat.Core.Domain.Common;
+using LinkDev.Talabat.Infrastructure.Persistence.Common;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace LinkDev.Talabat.Infrastructure.Persistence.Data.Config.Base
 {
+	[DbContextType(typeof(StoreDbContext))]
 	internal class BaseEntityConfigurations<TEntity , Tkey> : IEntityTypeConfiguration<TEntity>
 		where TEntity : BaseEntity<Tkey> where Tkey : IEquatable<Tkey>
 	{

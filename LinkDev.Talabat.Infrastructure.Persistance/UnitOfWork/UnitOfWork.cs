@@ -8,14 +8,14 @@ namespace LinkDev.Talabat.Infrastructure.Persistence.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
 	{
-		private readonly StoreContext _dbContext;
+		private readonly StoreDbContext _dbContext;
 		///private readonly Lazy<IGenericRepository<Product,int>> _productRepository;
 		///private readonly Lazy<IGenericRepository<ProductBrand,int>> _BrandsRepository;
 		///private readonly Lazy<IGenericRepository<ProductCategory,int>> _CategoriesRepository;
 		
 		private readonly ConcurrentDictionary<string, object> _Repositories;
 
-		public UnitOfWork( StoreContext context)
+		public UnitOfWork( StoreDbContext context)
         {
 			_dbContext = context;
 			_Repositories = new ();

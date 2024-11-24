@@ -8,6 +8,17 @@ namespace LinkDev.Talabat.Core.Domain.Entities.Orders
 {
     public class OrderItem : BaseAuditableEntity<int>
     {
+        public OrderItem()
+        {
+            
+        }
+        public OrderItem(ProductItemOrder product, decimal price, int quantity)
+        {
+            Product = product;
+            Price = price;
+            Quantity = quantity;
+        }
+
         public  required ProductItemOrder Product { get; set; }
 
 

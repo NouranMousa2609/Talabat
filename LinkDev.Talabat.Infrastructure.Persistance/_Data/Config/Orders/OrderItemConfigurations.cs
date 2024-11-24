@@ -18,7 +18,7 @@ namespace LinkDev.Talabat.Infrastructure.Persistence._Data.Config.Orders
 
             builder.OwnsOne(item => item.Product, product => product.WithOwner());
             builder.Property(item => item.Price)
-            .HasColumnType("decmail(8, 2)");
+            .HasColumnType("decimal(8, 2)");
         }
     }
 }

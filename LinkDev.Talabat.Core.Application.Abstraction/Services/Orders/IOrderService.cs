@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace LinkDev.Talabat.Core.Application.Abstraction.Services.Orders
 {
-    internal interface IOrderService
+    public interface IOrderService
     {
-
         Task<OrderToReturnDto> CreateOrderAsync(string buyermail, OrderToCreateDto order);
         Task<OrderToReturnDto> GetOrderByIdAsync(string buyerEmail, int orderId);
         Task<IEnumerable<OrderToReturnDto>> GetOrdersForUserAsync(string buyerEmail);

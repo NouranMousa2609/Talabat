@@ -6,6 +6,7 @@ using LinkDev.Talabat.Core.Application.Exceptions;
 using LinkDev.Talabat.Core.Domain.Contracts.Presistence;
 using LinkDev.Talabat.Core.Domain.Entities.Orders;
 using LinkDev.Talabat.Core.Domain.Entities.Products;
+using LinkDev.Talabat.Core.Domain.Specifications.Orders;
 using Microsoft.AspNetCore.Http.Features;
 using System;
 using System.Collections.Generic;
@@ -82,19 +83,31 @@ namespace LinkDev.Talabat.Core.Application.Services.Orders
             return mapper.Map<OrderToReturnDto>(orderToCreate);
         }
 
-        public Task<IEnumerable<DeliveryMethodDto>> GetDeliveryMethodsAsync()
+        public async Task<IEnumerable<OrderToReturnDto>> GetOrdersForUserAsync(string buyerEmail)
         {
-            throw new NotImplementedException();
+            var orderSpecs=new OrderSpecifications(buyerEmail);
+            var orders = await unitOfWork.GetRepository<Order,int>().GetAllWithSpecAsync(orderSpecs);
+            return mapper.Map<IEnumerable<OrderToReturnDto>>(orders);
+        }
+        public async Task<OrderToReturnDto> GetOrderByIdAsync(string buyerEmail, int orderId)
+        {
+            var orderSpecs = new OrderSpecifications(buyerEmail,orderId);
+
+            var order =await unitOfWork.GetRepository<Order,int>().GetWithSpecAsync(orderSpecs);
+
+            if (order is null)
+                throw new NotFoundException(nameof(Order),orderId);
+
+            return mapper.Map<OrderToReturnDto>(order);
+        }
+        public async Task<IEnumerable<DeliveryMethodDto>> GetDeliveryMethodsAsync()
+        {
+           var deliveryMethod=await unitOfWork.GetRepository<DeliveryMethod,int>().GetAllAsync();
+
+            return mapper.Map<IEnumerable<DeliveryMethodDto>>(deliveryMethod);
         }
 
-        public Task<OrderToReturnDto> GetOrderByIdAsync(string buyerEmail, int orderId)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<IEnumerable<OrderToReturnDto>> GetOrdersForUserAsync(string buyerEmail)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

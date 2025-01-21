@@ -3,6 +3,7 @@ using LinkDev.Talabat.Core.Application.Abstraction.Services;
 using LinkDev.Talabat.Core.Application.Abstraction.Services.Auth;
 using LinkDev.Talabat.Core.Application.Abstraction.Services.Basket;
 using LinkDev.Talabat.Core.Application.Abstraction.Services.Employees;
+using LinkDev.Talabat.Core.Application.Abstraction.Services.Orders;
 using LinkDev.Talabat.Core.Application.Abstraction.Services.Products;
 using LinkDev.Talabat.Core.Application.Services.Basket;
 using LinkDev.Talabat.Core.Application.Services.Employees;
@@ -26,8 +27,9 @@ namespace LinkDev.Talabat.Core.Application.Services
 		private readonly Lazy<IEmployeeService> _employeeService;
 		private readonly Lazy<IBasketService> _basketService;
 		private readonly Lazy<IAuthService> _authService;
+		private readonly Lazy<IOrderService> _orderService;
 
-		public ServiceManager(IUnitOfWork unitOfWork,IMapper mapper,IConfiguration configuration,Func<IBasketService>basketServiceFactory, Func<IAuthService> authServiceFactory)
+		public ServiceManager(IUnitOfWork unitOfWork,IMapper mapper,IConfiguration configuration,Func<IBasketService>basketServiceFactory, Func<IAuthService> authServiceFactory,Func<IOrderService> orderServiceFactory)
         {
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
@@ -36,6 +38,7 @@ namespace LinkDev.Talabat.Core.Application.Services
 			_employeeService = new Lazy<IEmployeeService>(()=>new EmployeeService(_unitOfWork,_mapper));
 			_basketService = new Lazy<IBasketService>(basketServiceFactory,LazyThreadSafetyMode.ExecutionAndPublication);
 			_authService = new Lazy<IAuthService>(authServiceFactory, LazyThreadSafetyMode.ExecutionAndPublication);
+			_orderService = new Lazy<IOrderService>(orderServiceFactory, LazyThreadSafetyMode.ExecutionAndPublication);
 		}
         public IProductService ProductService=>_productService.Value;
         public IEmployeeService EmployeeService => _employeeService.Value;
@@ -43,5 +46,7 @@ namespace LinkDev.Talabat.Core.Application.Services
 		public IBasketService BasketService =>_basketService.Value;
 
         public IAuthService AuthService =>_authService.Value;
+
+        public IOrderService OrderService => _orderService.Value;
     }
 }

@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace LinkDev.Talabat.Core.Application.Services.Orders
 {
-    internal class OrderService ( IMapper mapper ,IBasketService basketService , IUnitOfWork unitOfWork) : IOrderService
+    public class OrderService ( IMapper mapper ,IBasketService basketService , IUnitOfWork unitOfWork) : IOrderService
     {
         public async Task<OrderToReturnDto> CreateOrderAsync(string buyermail, OrderToCreateDto order)
         {
@@ -61,20 +61,24 @@ namespace LinkDev.Talabat.Core.Application.Services.Orders
             //4.Map Address 
              var address = mapper.Map<Address>(order.ShippingAddress);
 
-            //5.Create Order
+            //5.get delivery method
+            var deliveryMethod = await unitOfWork.GetRepository<DeliveryMethod, int>().GetAsync(order.DeliveryMethodId);
+
+
+            //6.Create Order
 
             var orderToCreate = new Order()
             {
                 BuyerEmail = buyermail,
                 ShippingAddress = address,
-                DeliveryMethodId=order.DeliveryMethodId,
+                DeliveryMethod= deliveryMethod,
                 Items = orderItems,
                 Subtotal=subTotal,
                 
             };  
             await unitOfWork.GetRepository<Order,int>().AddAysnc(orderToCreate);
 
-            //5.Save to Database
+            //7.Save to Database
 
             var created = await unitOfWork.CompleteAsync() > 0;
 

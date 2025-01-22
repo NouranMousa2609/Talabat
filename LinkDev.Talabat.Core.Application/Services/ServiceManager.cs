@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace LinkDev.Talabat.Core.Application.Services
 {
-    internal class ServiceManager : IServiceManager
+    public class ServiceManager : IServiceManager
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IMapper _mapper;

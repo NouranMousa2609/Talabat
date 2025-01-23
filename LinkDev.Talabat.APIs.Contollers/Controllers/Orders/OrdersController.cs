@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace LinkDev.Talabat.APIs.Controllers.Controllers.Orders
 {
-    //[Authorize]
+    [Authorize]
     public class OrdersController(IServiceManager serviceManager):BaseApiController
     {
         [HttpPost]

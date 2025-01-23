@@ -16,20 +16,22 @@ namespace LinkDev.Talabat.Infrastructure.Persistence
         public static IServiceCollection AddPersistenceService(this IServiceCollection Services, IConfiguration configuration)
         {
             #region StoreContext
-            Services.AddDbContext<StoreDbContext>((optionsbuilder) =>
+            Services.AddDbContext<StoreDbContext>((ServiceProvider, optionsbuilder) =>
             {
                 optionsbuilder
                 .UseLazyLoadingProxies()
-                .UseSqlServer(configuration.GetConnectionString("StoreContext"));
+                .UseSqlServer(configuration.GetConnectionString("StoreContext"))
+                .AddInterceptors(ServiceProvider.GetRequiredService<AuditInterceptor>());
 
 
 
             });
 
+            Services.AddScoped(typeof(AuditInterceptor));
             //Services. <IStoreContextInitializer, StoreContextInitializer>();
-            Services.AddScoped<IStoreDbInitializer, StoreDbInitializer>();
+            //Services.AddScoped<IStoreDbInitializer, StoreDbInitializer>();
             Services.AddScoped(typeof(IStoreDbInitializer), typeof(StoreDbInitializer));
-            Services.AddScoped(typeof(ISaveChangesInterceptor), typeof(CustomSaveChangesInterceptor));
+            //Services.AddScoped(typeof(ISaveChangesInterceptor), typeof(AuditInterceptor));
             #endregion
 
             #region IdentityContext

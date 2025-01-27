@@ -1,4 +1,5 @@
 ﻿using LinkDev.Talabat.APIs.Controllers.Base;
+using LinkDev.Talabat.Core.Application.Abstraction.DTOs._Commons;
 using LinkDev.Talabat.Core.Application.Abstraction.DTOs.Auth;
 using LinkDev.Talabat.Core.Application.Abstraction.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -33,6 +34,14 @@ namespace LinkDev.Talabat.APIs.Controllers.Controllers.Account
             return Ok(result);
         }
 
+        [Authorize]
+        [HttpGet("address")] //GET : /api/Account/address
+        public async Task<ActionResult<AddressDto>> GetUserAddress()
+        {
+            var result = await _serviceManager.AuthService.GetUserAddress(User);
+            return Ok(result);
+
+        }
 
     }
 }

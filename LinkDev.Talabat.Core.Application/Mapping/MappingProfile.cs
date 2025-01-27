@@ -8,11 +8,8 @@ using LinkDev.Talabat.Core.Domain.Entities.Basket;
 using LinkDev.Talabat.Core.Domain.Entities.Employees;
 using LinkDev.Talabat.Core.Domain.Entities.Orders;
 using LinkDev.Talabat.Core.Domain.Entities.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OrderAddress = LinkDev.Talabat.Core.Domain.Entities.Orders.Address;
+using UserAddress = LinkDev.Talabat.Core.Domain.Entities.Identity.Address;
 
 namespace LinkDev.Talabat.Core.Application.Mapping
 {
@@ -40,7 +37,9 @@ namespace LinkDev.Talabat.Core.Application.Mapping
                 .ForMember(dest => dest.ProductName, options => options.MapFrom(src => src.Product.ProductName))
                  .ForMember(dest => dest.PictureUrl, options => options.MapFrom<OrderItemPictureUrlResolver>());
 
-            CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<OrderAddress, AddressDto>().ReverseMap();
+            CreateMap<UserAddress, AddressDto>();
+
             CreateMap<DeliveryMethod, DeliveryMethodDto>();
 
 

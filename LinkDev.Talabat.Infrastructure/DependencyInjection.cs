@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LinkDev.Talabat.Infrastructure.BasketRepository;
+using LinkDev.Talabat.Shared.Models;
 namespace LinkDev.Talabat.Infrastructure
 {
 	public static class DependencyInjection
@@ -22,7 +23,10 @@ namespace LinkDev.Talabat.Infrastructure
 
 
 			});
-			 services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository.BasketRepository));
+
+		    services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository.BasketRepository));
+
+			services.Configure<RedisSettings>(configuration.GetSection("RedisSettings"));
 			return services;
 		}
 	}

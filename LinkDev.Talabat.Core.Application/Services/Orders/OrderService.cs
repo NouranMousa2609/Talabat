@@ -3,6 +3,7 @@ using LinkDev.Talabat.Core.Application.Abstraction.DTOs.Orders;
 using LinkDev.Talabat.Core.Application.Abstraction.Services.Basket;
 using LinkDev.Talabat.Core.Application.Abstraction.Services.Orders;
 using LinkDev.Talabat.Core.Application.Exceptions;
+using LinkDev.Talabat.Core.Domain.Contracts.Infrastructure;
 using LinkDev.Talabat.Core.Domain.Contracts.Presistence;
 using LinkDev.Talabat.Core.Domain.Entities.Orders;
 using LinkDev.Talabat.Core.Domain.Entities.Products;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace LinkDev.Talabat.Core.Application.Services.Orders
 {
-    public class OrderService ( IMapper mapper ,IBasketService basketService , IUnitOfWork unitOfWork) : IOrderService
+    public class OrderService ( IMapper mapper ,IBasketService basketService , IUnitOfWork unitOfWork,IPaymentService paymentService) : IOrderService
     {
         public async Task<OrderToReturnDto> CreateOrderAsync(string buyermail, OrderToCreateDto order)
         {
@@ -66,6 +67,17 @@ namespace LinkDev.Talabat.Core.Application.Services.Orders
 
 
             //6.Create Order
+            var orderRepo = unitOfWork.GetRepository<Order, int>();
+
+            var orderSpec = new OrderByPaymentIntentSpecifications(basket.PaymentIntentId!);
+
+            var existingOrder = await orderRepo.GetWithSpecAsync(orderSpec);
+
+            if (existingOrder is not null)
+            { 
+                orderRepo.Delete(existingOrder);
+                await paymentService.CreateOrUpdatePaymentIntent(basket.Id);
+            }
 
             var orderToCreate = new Order()
             {
@@ -74,9 +86,10 @@ namespace LinkDev.Talabat.Core.Application.Services.Orders
                 DeliveryMethod= deliveryMethod,
                 Items = orderItems,
                 Subtotal=subTotal,
+                PaymentIntentId=basket.PaymentIntentId!
                 
             };  
-            await unitOfWork.GetRepository<Order,int>().AddAysnc(orderToCreate);
+            await orderRepo.AddAysnc(orderToCreate);
 
             //7.Save to Database
 

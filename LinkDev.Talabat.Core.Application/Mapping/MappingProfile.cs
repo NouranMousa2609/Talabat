@@ -11,6 +11,7 @@ using LinkDev.Talabat.Core.Domain.Entities.Products;
 using OrderAddress = LinkDev.Talabat.Core.Domain.Entities.Orders.Address;
 using UserAddress = LinkDev.Talabat.Core.Domain.Entities.Identity.Address;
 
+
 namespace LinkDev.Talabat.Core.Application.Mapping
 {
     internal class MappingProfile : Profile
@@ -28,7 +29,11 @@ namespace LinkDev.Talabat.Core.Application.Mapping
             CreateMap<ProductCategory, CategoryDto>();
             CreateMap<Employee, EmployeeDto>();
             CreateMap<CustomerBasket, CustomerBasketDto>().ReverseMap();
+            CreateMap<CustomerBasket, Shared.Models.Basket.CustomerBasketDto>().ReverseMap();
+
             CreateMap<BasketItem, BasketItemDto>().ReverseMap();
+            CreateMap<BasketItem, Shared.Models.Basket.BasketItemDto>().ReverseMap();
+
             CreateMap<Order, OrderToReturnDto>()
                   .ForMember(dest => dest.DeliveryMethod, options => options.MapFrom(src => src.DeliveryMethod!.ShortName));
 

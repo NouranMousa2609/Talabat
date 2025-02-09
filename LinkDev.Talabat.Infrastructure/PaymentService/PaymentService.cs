@@ -1,20 +1,31 @@
-﻿using LinkDev.Talabat.Core.Application.Exceptions;
+﻿using AutoMapper;
+using LinkDev.Talabat.Core.Application.Exceptions;
 using LinkDev.Talabat.Core.Domain.Contracts.Infrastructure;
 using LinkDev.Talabat.Core.Domain.Contracts.Presistence;
 using LinkDev.Talabat.Core.Domain.Entities.Basket;
 using LinkDev.Talabat.Core.Domain.Entities.Orders;
 using LinkDev.Talabat.Shared.Models;
+using LinkDev.Talabat.Shared.Models.Basket;
 using Microsoft.Extensions.Options;
 using Stripe;
 using Product = LinkDev.Talabat.Core.Domain.Entities.Products.Product;
 
 namespace LinkDev.Talabat.Infrastructure.PaymentService
 {
-    internal class PaymentService(IBasketRepository basketRepository,IUnitOfWork unitOfWork,IOptions<RedisSettings> redisSettings) : IPaymentService
+    public class PaymentService(IBasketRepository basketRepository,
+        IUnitOfWork unitOfWork,
+        IMapper mapper,
+        IOptions<RedisSettings> redisSettings,
+        IOptions<StripeSettings> stripeSettings
+        ) : IPaymentService
     {
         private readonly RedisSettings _redisSettings= redisSettings.Value;
-        public async Task<CustomerBasket?> CreateOrUpdatePaymentIntent(string basketId)
+        private readonly StripeSettings _stripeSettings = stripeSettings.Value;
+
+        public async Task<CustomerBasketDto> CreateOrUpdatePaymentIntent(string basketId)
         {
+            StripeConfiguration.ApiKey= _stripeSettings.SecretKey;
+
             var basket = await basketRepository.GetAsync(basketId);
 
             if (basket is null) throw new NotFoundException(nameof(CustomerBasket), basketId);
@@ -46,14 +57,28 @@ namespace LinkDev.Talabat.Infrastructure.PaymentService
 
             if ( string.IsNullOrEmpty( basket.PaymentIntentId)) //Create new paymentIntent
             {
+                //var options = new PaymentIntentCreateOptions()
+                //{
+                //    Amount=(long)basket.Items.Sum(item=>item.Price*100*item.Quantity)+(long)basket.ShippingPrice*100,
+                //    Currency="USD",
+                //    PaymentMethodTypes= new List<string>() { "card" }
+                //};
+
+                //var options = new PaymentIntentCreateOptions()
+                //{
+                //    Amount = Convert.ToInt64(basket.Items.Sum(item => item.Price * 100 * item.Quantity) + basket.ShippingPrice * 100),
+                //    Currency = "USD",
+                //    PaymentMethodTypes = new List<string>() { "card" }
+                //};
+                long amount = (long)(basket.Items.Sum(item => (long)(item.Price * 100) * item.Quantity) + (long)(basket.ShippingPrice * 100));
+
                 var options = new PaymentIntentCreateOptions()
                 {
-                    Amount=(long)basket.Items.Sum(item=>item.Price*100*item.Quantity)+(long)basket.ShippingPrice*100,
-                    Currency="USD",
-                    PaymentMethodTypes= new List<string>() { "Card"}
+                    Amount = amount,
+                    Currency = "USD",
+                    PaymentMethodTypes = new List<string>() { "card" }
                 };
-
-               paymentIntent= await paymentIntentService.CreateAsync(options);
+                paymentIntent = await paymentIntentService.CreateAsync(options);
                 basket.PaymentIntentId = paymentIntent.Id;
                 basket.ClientSecret = paymentIntent.ClientSecret;
             }
@@ -71,7 +96,7 @@ namespace LinkDev.Talabat.Infrastructure.PaymentService
 
             await basketRepository.UpdateAsync(basket,TimeSpan.FromDays(_redisSettings.TimeToLiveInDays));
 
-            return basket;
+            return mapper.Map<CustomerBasketDto>(basket);
         }
 
 

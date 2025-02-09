@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LinkDev.Talabat.Infrastructure.BasketRepository;
 using LinkDev.Talabat.Shared.Models;
+using LinkDev.Talabat.Infrastructure.PaymentService;
 namespace LinkDev.Talabat.Infrastructure
 {
 	public static class DependencyInjection
@@ -25,8 +26,13 @@ namespace LinkDev.Talabat.Infrastructure
 			});
 
 		    services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository.BasketRepository));
+            services.AddScoped(typeof(IPaymentService), typeof(PaymentService.PaymentService));
 
 			services.Configure<RedisSettings>(configuration.GetSection("RedisSettings"));
+
+            services.Configure<StripeSettings>(configuration.GetSection("StripeSettings"));
+
+
 			return services;
 		}
 	}

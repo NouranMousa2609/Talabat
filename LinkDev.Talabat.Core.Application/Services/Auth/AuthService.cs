@@ -1,6 +1,9 @@
-﻿using LinkDev.Talabat.Core.Application.Abstraction.DTOs.Auth;
+﻿using AutoMapper;
+using LinkDev.Talabat.Core.Application.Abstraction.DTOs._Commons;
+using LinkDev.Talabat.Core.Application.Abstraction.DTOs.Auth;
 using LinkDev.Talabat.Core.Application.Abstraction.Services.Auth;
 using LinkDev.Talabat.Core.Application.Exceptions;
+using LinkDev.Talabat.Core.Application.Extensions;
 using LinkDev.Talabat.Core.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -15,9 +18,41 @@ namespace LinkDev.Talabat.Core.Application.Services.Auth
     public class AuthService(
         IOptions<JwtSettings> jwtSettings,
         UserManager<ApplicationUser> _userManager,
-        SignInManager <ApplicationUser> _signInManager) : IAuthService
+        SignInManager <ApplicationUser> _signInManager,
+        IMapper mapper) : IAuthService
     {
         private readonly JwtSettings _jwtSettings = jwtSettings.Value;
+
+        public async Task<bool> EmailExists(string Email)
+        {
+           
+            return await _userManager.FindByEmailAsync(Email!) is not null;
+        }
+
+        public async Task<UserDto> GetCurrentUser(ClaimsPrincipal claimsPrincipal)
+        {
+            var email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+            var user = await _userManager.FindByEmailAsync(email!);
+
+            return new UserDto()
+            {
+                Id = user!.Id,
+                Email = user!.Email!,
+               DisplayName  = user.DisplayName,
+               Token=await GenerateTokenAsync(user),
+            };
+        }
+
+        public async Task<AddressDto?> GetUserAddress(ClaimsPrincipal claimsPrincipal)
+        {
+            var email = claimsPrincipal?.FindFirstValue(ClaimTypes.Email);
+            var user = await _userManager.FindUserWithAddress(claimsPrincipal!);
+
+            var address= mapper.Map<AddressDto>(user!.Address);
+            return address;
+
+        }
+
         public async Task<UserDto> LoginAsync(LoginDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -43,15 +78,20 @@ namespace LinkDev.Talabat.Core.Application.Services.Auth
 
         public async Task<UserDto> RegisterAsync(RegisterDto model)   
         {
+            //if (EmailExists(model.Email).Result)
+            //    throw new BadRequestException("this Email is already in Use");
+
             var user = new ApplicationUser()
             {
                 DisplayName = model.DisplayName,
                 Email = model.Email,
                 UserName = model.UserName,
                 PhoneNumber = model.PhoneNumber,
+                PasswordHash=model.Password
+                
             };
-            var result = await _userManager.CreateAsync(user);
-            if (!result.Succeeded) throw new ValidationException() { Errors=result.Errors.Select(E=>E.Description) };
+            var result = await _userManager.CreateAsync(user,user.PasswordHash);
+            if (!result.Succeeded) throw new ValidationException() { Errors=result.Errors.Select(E=>E.Description).ToArray() };
 
             var response = new UserDto()
             {
@@ -62,6 +102,23 @@ namespace LinkDev.Talabat.Core.Application.Services.Auth
 
             };
             return response;
+        }
+
+        public async Task<AddressDto> UpdateUserAddress(ClaimsPrincipal claimsPrincipal, AddressDto addressDto)
+        {
+            var Updatedaddress = mapper.Map<Address>(addressDto);
+
+            var user = await _userManager.FindUserWithAddress(claimsPrincipal!);
+
+            if (user?.Address is not null) Updatedaddress.Id= user.Address.Id;
+
+            user!.Address= Updatedaddress; 
+            
+            var result =await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded) throw new BadRequestException(result.Errors.Select(error => error.Description).Aggregate((X, Y) => $"{X} , {Y}"));
+
+            return addressDto;
         }
 
         private async Task<string> GenerateTokenAsync(ApplicationUser user)
